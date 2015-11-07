@@ -261,6 +261,13 @@ func (w *Reader) LastToken() (leks.Token, error) {
 	return w.last.tok, w.last.err
 }
 
+func (w *Reader) PeekToken() (tok leks.Token, err error) {
+	m := w.Mark()
+	tok, err = w.ReadToken()
+	w.Discard(m)
+	return tok, err
+}
+
 func (w *Reader) ReadToken() (tok leks.Token, err error) {
 	defer func() {
 		w.last = readOp{tok: tok, err: err}
