@@ -230,15 +230,14 @@ func (w *Reader) Discard(m *Mark) error {
 }
 
 func (w *Reader) CommitAll() {
-	w.log = nil
-	for i := 1; i < len(w.marks); i++ {
-		w.marks[i] = nil
+	w.DiscardAll()
+	for i := range w.log {
+		w.log[i] = readOp{}
 	}
-	w.marks = w.marks[0:1]
+	w.log = w.log[:0]
 }
 
 func (w *Reader) DiscardAll() {
-	w.log = nil
 	for i := 1; i < len(w.marks); i++ {
 		w.marks[i] = nil
 	}
