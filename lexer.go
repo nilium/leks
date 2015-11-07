@@ -430,7 +430,7 @@ func (l *Lexer) readNumber() (Token, error) {
 			goto done
 		case l.readOneOf(isBinSep):
 			var n int
-			n, err = l.readWhile(false, isOct)
+			n, err = l.readWhile(false, isBin)
 			kind = TBinLit
 			if n == 0 {
 				terr = errMalformedBin
@@ -476,12 +476,12 @@ parseDecimal:
 
 checkExponent:
 	{
-		if kind != TFloatLit && kind != TIntLit {
-			kind = TIntLit
-		}
-
 		if !l.readOneOf(isExp) {
 			goto done
+		}
+
+		if kind != TFloatLit && kind != TIntLit {
+			kind = TIntLit
 		}
 
 		// We actually don't care if one of these is read.
