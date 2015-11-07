@@ -299,8 +299,14 @@ func (t Token) String() string {
 
 func (t Token) Int() (int64, error) {
 	switch t.Kind {
-	case TIntLit, TIntExpLit, TOctLit, THexLit, TBinLit:
-		return strconv.ParseInt(string(t.Text), 0, 64)
+	case TIntLit, TIntExpLit:
+		return strconv.ParseInt(string(t.Text), 10, 64)
+	case TOctLit:
+		return strconv.ParseInt(string(t.Text[1:]), 8, 64)
+	case THexLit:
+		return strconv.ParseInt(string(t.Text[2:]), 16, 64)
+	case TBinLit:
+		return strconv.ParseInt(string(t.Text[2:]), 2, 64)
 	}
 	return 0, ErrInvalidKind
 }
