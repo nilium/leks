@@ -144,7 +144,7 @@ func (w *Reader) GoString() string {
 }
 
 func (w *Reader) Mark() *Mark {
-	head := len(w.log)
+	head := w.marks[len(w.marks)-1].i
 	m := &Mark{
 		i:    head,
 		head: head,
