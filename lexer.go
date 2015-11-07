@@ -114,7 +114,6 @@ func (l *Lexer) ReadToken() (Token, error) {
 		case r == '/':
 			if next, err := l.peekRune(); err == nil && (next == '/' || next == '*') {
 				if tok, err = l.readComment(); err != nil {
-					log.Printf("Lexer: readToken: error skipping comment: %v", err)
 					return l.token(TError, false, err), err
 				}
 				break
