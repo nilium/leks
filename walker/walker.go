@@ -7,34 +7,11 @@ package walker
 import (
 	"bytes"
 	crand "crypto/rand"
-	"errors"
 	"fmt"
 	"strconv"
 
 	"github.com/nilium/leks"
 )
-
-var (
-	// Reader-specific errors
-
-	// ErrBadWalkerState may be returned by a method when the reader wasn't allocated with walker.New.
-	ErrBadWalkerState = errors.New("invalid reader state")
-	ErrInvalidRead    = errors.New("last op was not ReadToken")
-
-	// Mark errors
-
-	ErrMarkNil       = errors.New("mark is nil")
-	ErrMarkUnderflow = errors.New("mark depth underflow")
-	ErrNoMarks       = errors.New("walker has no marks")
-	ErrMarkNotFound  = errors.New("mark not found")
-)
-
-func IsFatalErr(err error) bool {
-	return err != nil &&
-		(err == ErrMarkNil ||
-			err == ErrMarkUnderflow ||
-			err == ErrBadWalkerState)
-}
 
 type TokenReader interface {
 	ReadToken() (leks.Token, error)

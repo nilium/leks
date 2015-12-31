@@ -6,7 +6,6 @@ package leks
 
 import (
 	"bytes"
-	"errors"
 	"fmt"
 	"io"
 	"log"
@@ -15,12 +14,30 @@ import (
 	"unicode/utf8"
 )
 
-var (
-	errBlockCommentEOF = errors.New("Lexer: readBlockComment: expected closing */ but encountered EOF")
-	errNoComment       = errors.New("Lexer: readComment: not a comment")
-	errInvalidUnread   = errors.New("Lexer: unreadRune: last operation was not readRune")
-	errMalformedHex    = errors.New("Lexer: readNumber: malformed hex number")
-	errMalformedBin    = errors.New("Lexer: readNumber: malformed binary number")
+type Error int
+
+func (e Error) Error() string {
+	desc, ok := errorDescriptions[e]
+	if !ok {
+		return "leks: unknown error " + strconv.Itoa(int(e))
+	}
+	return "leks: " + desc
+}
+
+var errorDescriptions = map[Error]string{
+	errBlockCommentEOF: "readBlockComment: expected closing */ but encountered EOF",
+	errNoComment:       "readComment: not a comment",
+	errInvalidUnread:   "unreadRune: last operation was not readRune",
+	errMalformedHex:    "readNumber: malformed hex number",
+	errMalformedBin:    "readNumber: malformed binary number",
+}
+
+const (
+	errBlockCommentEOF = Error(iota)
+	errNoComment
+	errInvalidUnread
+	errMalformedHex
+	errMalformedBin
 )
 
 type Lexer struct {
